@@ -6,7 +6,7 @@ uniform vec2 u_resolution;
 uniform vec2 u_mouse;
 uniform float u_time;
 /*
-Basic Example of a Mandelbulp Shader
+Basic Example of a Mandelbrot Shader
 Where $c$ = Pixel Position and $x_0$ = Mouse Position.
 $$ x = x^2 +c $$ 
 */
@@ -18,14 +18,13 @@ void main() {
     x = vec2(x.y, x.x); // Flip Mouse for Starting Point
     int idx = 0; 
     for(int _ = 0; _ < 1000; _++) {
-        x = vec2(x.x*x.x - x.y*x.y + st.x , x.x*x.y + x.y*x.x + st.y); // Compute Mandelbrot Polynomial $x = x^2 + c$
+        x = vec2(x.x*x.x - x.y*x.y + st.x , 2.0 * x.y*x.x + st.y); // Compute Mandelbrot Polynomial $x = x^2 + c$
         idx++; // Increment Index
         if(length(x) > 1000.0){ // Abort for High Index
             break;
         }
     }
-    idx /= 1000;
     // Visualize
     x = normalize(x);
-    gl_FragColor = vec4(float(idx),x.x,x.y,1.0);
+    gl_FragColor = vec4(float(idx)/ 1e3, x.x,x.y,1.0);
 }
